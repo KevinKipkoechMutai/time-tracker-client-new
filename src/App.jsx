@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react"
 import { themeSettings } from "./theme"
 import { Box, CssBaseline, ThemeProvider } from "@mui/material"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { ToastProvider } from "react-toast-notifications"
 import Navbar from "./scenes/Navbar"
 import Dashboard from "./scenes/dashboard"
 import Home from "./scenes/home"
@@ -31,18 +32,20 @@ function App() {
 
   return (
     <div className='app'>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Box width="100%" height="100%" padding="1rem 2rem 4rem 2rem">
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home data={data}/>}/>
-              <Route path="/dashboard" element={<Dashboard data={data}/>}/>
-            </Routes>
-          </Box>
-        </ThemeProvider>
-      </BrowserRouter>
+      <ToastProvider>
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Box width="100%" height="100%" padding="1rem 2rem 4rem 2rem">
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home data={data} setData={setData}/>}/>
+                <Route path="/dashboard" element={<Dashboard data={data} setData={setData}/>}/>
+              </Routes>
+            </Box>
+          </ThemeProvider>
+        </BrowserRouter>
+      </ToastProvider>
     </div>
   )
 }
