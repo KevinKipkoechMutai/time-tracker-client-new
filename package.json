@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "http://localhost:1337",
+  "proxy": "https://time-tracker-8j3a.onrender.com",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

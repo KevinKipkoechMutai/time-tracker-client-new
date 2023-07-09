@@ -10,7 +10,7 @@ const TaskCard = ({ id, name, taskType, timeSpent, startDate, data, setData }) =
 
     //delete task
   const deleteTask = async (id) => {
-    const deleteTaskRequest = await fetch(`http://localhost:1337/task/tasks/${id}`, {
+    const deleteTaskRequest = await fetch(`https://time-tracker-8j3a.onrender.com/task/tasks/${id}`, {
       method: 'DELETE',
     })
 

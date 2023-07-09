@@ -91,7 +91,7 @@ const Home = ({ data, setData }) => {
     };
     console.log(formData)
   
-    const response = await fetch('http://localhost:1337/task/tasks', {
+    const response = await fetch('https://time-tracker-8j3a.onrender.com/task/tasks', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +100,7 @@ const Home = ({ data, setData }) => {
     });
   
     if (response.status === 201) {
-      const tasks = await fetch("http://localhost:1337/task/tasks", {
+      const tasks = await fetch("https://time-tracker-8j3a.onrender.com/task/tasks", {
       method: "GET",
       })
       const taskList = await tasks.json()

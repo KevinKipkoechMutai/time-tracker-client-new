@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const response = await fetch("http://localhost:1337/task/tasks")
+      const response = await fetch("https://time-tracker-8j3a.onrender.com/task/tasks")
       if (response.status === 200) {
         const tasks = await response.json()
         //console.log(tasks)
