@@ -5,14 +5,25 @@ import DeleteIcon from "@mui/icons-material/Delete"
 
 const TaskCard = ({ id, name, taskType, timeSpent, startDate }) => {
     const { palette } = useTheme()
-    
-    const handleDelete = async () => {
 
+    //delete task
+  const deleteTask = async (id) => {
+    const deleteTaskRequest = await fetch(`http://localhost:1337/task/tasks/${id}`, {
+      method: 'DELETE',
+    })
+
+    console.log(id)
+
+    if (deleteTaskRequest.status === 200) {
+      console.log('Task deleted successfully')
+    } else {
+      console.log('Error deleting the task')
     }
+  }
 
     return (
         <Box 
-        width="30rem" 
+        minWidth="20rem" 
         m="auto" 
         display="flex" 
         flexDirection="column" 
@@ -44,7 +55,7 @@ const TaskCard = ({ id, name, taskType, timeSpent, startDate }) => {
                 variant="contained" 
                 startIcon={<DeleteIcon/>} 
                 sx={{ backgroundColor: "red" }}
-                onClick={() => handleDelete(id)}
+                onClick={() => deleteTask(id)}
                 
             >Delete</Button>
         </FlexBetween>

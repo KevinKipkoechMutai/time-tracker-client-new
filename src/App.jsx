@@ -10,6 +10,7 @@ import Home from "./scenes/home"
 function App() {
   const theme = useMemo(() => createTheme(themeSettings), [])
   const [data, setData] = useState([])
+  
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -25,7 +26,8 @@ function App() {
     fetchTasks()
   }, [])
 
-  console.log(data)
+  //console.log(data)
+
 
   return (
     <div className='app'>
