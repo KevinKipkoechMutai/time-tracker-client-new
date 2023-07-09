@@ -1,5 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Typography, useTheme, Modal, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
+// import dayjs from "dayjs"
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import HomeHero from "../../components/HomeHero"
 import TaskContainer from "../../components/TaskContainer"
 import TaskCard from "../../components/TaskCard"
@@ -21,12 +26,36 @@ const style = {
 const Home = ({ data, setData }) => {
   const { palette } = useTheme()
   const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    name: "",
-    taskType: "",
-    timeSpent: "",
-    startDate: ""
-  })
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   taskType: "",
+  //   timeSpent: "",
+  //   startDate: ""
+  // })
+  const [name, setName] = useState("")
+  const [taskType, setTaskType] = useState("")
+  const [timeSpent, setTimeSpent] = useState("")
+  const [startDate, setStartDate] = useState("")
+
+
+
+    // configuring date picker
+    // function convertDateToString(date) {
+    //   let day = date.getDate()
+    //   let month = date.getMonth()
+    //   let year = date.getFullYear()
+  
+    //   if (day < 10) {
+    //     day = "0" + day
+    //   }
+    //   if (month < 10) {
+    //     month = "0" + month
+    //   }
+    //   return `${month}/${day}/${year}`
+    // }
+    
+    //const currentDate = convertDateToString(new Date())
+    //console.log(currentDate)
 
   // get tasks
   const tasks = useMemo(() => {
@@ -49,27 +78,42 @@ const Home = ({ data, setData }) => {
       })
     )
   }, [data, setData])
-
-  //handle form-area changes
-  function handleChange(e) {
-    const { name, value } = e.target
-    setFormData((prevData) => ({
-      ...prevData, [name] : value
-    }))
-  }
-
-  //handle numeric form area change
-  function handleChangeNum(e) {
-    const { name, value } = e.target
-    setFormData((prevData) => ({
-      ...prevData, [name] : parseInt(value)
-    }))
-  }
+  
 
   // post a task
-  const handleSubmit = async () => {
-
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const formData = {
+      name: name,
+      taskType: taskType,
+      timeSpent: parseInt(timeSpent),
+      startDate: startDate,
+    };
+    console.log(formData)
+  
+    const response = await fetch('http://localhost:1337/task/tasks', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+  
+    if (response.status === 201) {
+      const tasks = await fetch("http://localhost:1337/task/tasks", {
+      method: "GET",
+      })
+      const taskList = await tasks.json()
+      setData(taskList)
+      setModalIsOpen(false)
+      alert("Task created successfully!")
+    } else {
+      alert("Sorry. Something went wrong.")
+      console.log(response.status)
+      console.error("Error:", response.statusText)
+      setModalIsOpen(false)
+    }
+  }  
 
   return (
     <Box width="100%" height="100%">
@@ -88,17 +132,18 @@ const Home = ({ data, setData }) => {
           <Box sx={style} display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap="0.3rem">
             <Typography variant="h3" color={palette.grey[700]}>Create Task</Typography>
             <br />
-            <FormControl onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap="0.5rem">
                  
-                  <InputLabel id="type-select">Type</InputLabel>
+                  <InputLabel id="type-select-label">Type</InputLabel>
                   <Select
-                    labelId="type-select"
-                    id="task-type-select"
-                    value={formData.taskType}
+                    labelId="type-select-label"
+                    id="type-select"
+                    value={taskType}
                     label="Type"
-                    onChange={handleChange}
+                    onChange={(e) => setTaskType(e.target.value)}
                     fullWidth
+                    required
                   >
                     <MenuItem value="story">Story</MenuItem>
                     <MenuItem value="bug">Bug</MenuItem>
@@ -111,20 +156,41 @@ const Home = ({ data, setData }) => {
                     fullWidth
                     type="text"
                     name="name"
-                    value={formData.name}
-                    onChange={handleChange}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
                   />
 
                   <TextField 
-                    label="Time Spent"
+                    label="Days Spent"
                     variant="outlined"
-                    autoComplete="time"
                     fullWidth
-                    type="number"
+                    type="text"
+                    required
                     name="timeSpent"
-                    value={formData.timeSpent}
-                    onChange={handleChangeNum}
+                    value={timeSpent}
+                    onChange={(e) => setTimeSpent(e.target.value)}
                   />
+
+                  <TextField 
+                    
+                    variant="outlined"
+                    fullWidth
+                    type="date"
+                    required
+                    name="timeSpent"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+
+                  {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker']}>
+                      <DatePicker 
+                        label="Start Date" 
+                        value={startDate} 
+                        onChange={(newVal) => setStartDate(newVal)}/>
+                    </DemoContainer>
+                  </LocalizationProvider> */}
 
                   <Button
                     variant="contained"
@@ -133,11 +199,11 @@ const Home = ({ data, setData }) => {
                     type="submit"
                   >Post</Button>
                 </Box>
-            </FormControl>
+            </form>
           </Box>
         </Modal>
       </Box>
-      <TaskContainer width="100%" p="1.5rem" display="flex" flexDirection="column" gap="0.3rem">
+      <TaskContainer width="100%" p="1.5rem" display="flex" gap="0.1rem" flexWrap="wrap" justifyContent="center" alignItems="center">
         {tasks}
       </TaskContainer>
     </Box>
