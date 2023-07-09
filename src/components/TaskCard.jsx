@@ -19,16 +19,19 @@ const TaskCard = ({ id, name, taskType, timeSpent, startDate, data, setData }) =
         setData(newTaskList)
         console.log('Task deleted successfully')
         //addToast('Task deleted successfully', { appearance: 'success' })
+        alert("Task deleted successfully.")
     } else {
       console.log('Error deleting the task')
      // addToast('Sorry. Could not delete task.', { appearance: 'error' })
+     alert("Sorry. Could not delete task.")
     }
   }
 
     return (
         <Box 
-        minWidth="20rem" 
+        width="25rem" 
         m="auto" 
+        mb="1rem"
         display="flex" 
         flexDirection="column" 
         gap="1rem" 
