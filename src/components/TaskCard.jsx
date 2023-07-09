@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Typography, useTheme } from "@mui/material"
-import { useToasts } from "react-toast-notifications"
+//import { useToasts } from "react-toast-notifications"
 import FlexBetween from "./FlexBetween"
 import DeleteIcon from "@mui/icons-material/Delete"
 
 const TaskCard = ({ id, name, taskType, timeSpent, startDate, data, setData }) => {
     const { palette } = useTheme()
-    const { addToast } = useToasts()
+    //const { addToast } = useToasts()
 
     //delete task
   const deleteTask = async (id) => {
@@ -18,10 +18,10 @@ const TaskCard = ({ id, name, taskType, timeSpent, startDate, data, setData }) =
         const newTaskList = data.filter((task) => task.id !== id)
         setData(newTaskList)
         console.log('Task deleted successfully')
-        addToast('Task deleted successfully', { appearance: 'success' })
+        //addToast('Task deleted successfully', { appearance: 'success' })
     } else {
       console.log('Error deleting the task')
-      addToast('Sorry. Could not delete task.', { appearance: 'error' })
+     // addToast('Sorry. Could not delete task.', { appearance: 'error' })
     }
   }
 

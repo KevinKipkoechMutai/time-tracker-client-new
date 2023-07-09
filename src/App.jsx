@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react"
 import { themeSettings } from "./theme"
 import { Box, CssBaseline, ThemeProvider } from "@mui/material"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { ToastProvider } from "react-toast-notifications"
+//import { ToastProvider } from "react-toast-notifications"
 import Navbar from "./scenes/Navbar"
 import Dashboard from "./scenes/dashboard"
 import Home from "./scenes/home"
@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div className='app'>
-      <ToastProvider>
+     
         <BrowserRouter>
           <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -45,7 +45,7 @@ function App() {
             </Box>
           </ThemeProvider>
         </BrowserRouter>
-      </ToastProvider>
+     
     </div>
   )
 }

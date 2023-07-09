@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Box, Button, Typography, useTheme, Modal } from "@mui/material"
+import { Box, Button, Typography, useTheme, Modal, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
 import HomeHero from "../../components/HomeHero"
 import TaskContainer from "../../components/TaskContainer"
 import TaskCard from "../../components/TaskCard"
@@ -16,18 +16,22 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-};
+}
 
-
-const Home = ({ data }) => {
+const Home = ({ data, setData }) => {
   const { palette } = useTheme()
   const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [taskList, setTaskList] = useState([])
+  const [formData, setFormData] = useState({
+    name: "",
+    taskType: "",
+    timeSpent: "",
+    startDate: ""
+  })
 
   // get tasks
   const tasks = useMemo(() => {
     return (
-      taskList.map(({ id, name, timeSpent, taskType, startDate}, index) => {
+      data.map(({ id, name, timeSpent, taskType, startDate}, index) => {
         const formattedStartDate = startDate.toLocaleString()
 
         return (
@@ -38,11 +42,34 @@ const Home = ({ data }) => {
           timeSpent={timeSpent}
           taskType={taskType}
           startDate={formattedStartDate}
+          setData={setData}
+          data={data}
         />
         )
       })
     )
-  }, [data])
+  }, [data, setData])
+
+  //handle form-area changes
+  function handleChange(e) {
+    const { name, value } = e.target
+    setFormData((prevData) => ({
+      ...prevData, [name] : value
+    }))
+  }
+
+  //handle numeric form area change
+  function handleChangeNum(e) {
+    const { name, value } = e.target
+    setFormData((prevData) => ({
+      ...prevData, [name] : parseInt(value)
+    }))
+  }
+
+  // post a task
+  const handleSubmit = async () => {
+
+  }
 
   return (
     <Box width="100%" height="100%">
@@ -58,18 +85,60 @@ const Home = ({ data }) => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+          <Box sx={style} display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap="0.3rem">
+            <Typography variant="h3" color={palette.grey[700]}>Create Task</Typography>
+            <br />
+            <FormControl onSubmit={handleSubmit}>
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap="0.5rem">
+                 
+                  <InputLabel id="type-select">Type</InputLabel>
+                  <Select
+                    labelId="type-select"
+                    id="task-type-select"
+                    value={formData.taskType}
+                    label="Type"
+                    onChange={handleChange}
+                    fullWidth
+                  >
+                    <MenuItem value="story">Story</MenuItem>
+                    <MenuItem value="bug">Bug</MenuItem>
+                  </Select>
+
+                  <TextField 
+                    label="Name"
+                    variant="outlined"
+                    autoComplete="new-name"
+                    fullWidth
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+
+                  <TextField 
+                    label="Time Spent"
+                    variant="outlined"
+                    autoComplete="time"
+                    fullWidth
+                    type="number"
+                    name="timeSpent"
+                    value={formData.timeSpent}
+                    onChange={handleChangeNum}
+                  />
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    type="submit"
+                  >Post</Button>
+                </Box>
+            </FormControl>
           </Box>
         </Modal>
       </Box>
       <TaskContainer width="100%" p="1.5rem" display="flex" flexDirection="column" gap="0.3rem">
-        {tasks ? tasks : <div><h1>Loading...</h1></div>}
+        {tasks}
       </TaskContainer>
     </Box>
   ) 
