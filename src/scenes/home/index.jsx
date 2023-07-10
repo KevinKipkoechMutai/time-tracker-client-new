@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Box, Button, Typography, useTheme, Modal, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material"
+import { Box, Button, Typography, useTheme, Modal, TextField, InputLabel, Select, MenuItem } from "@mui/material"
 // import dayjs from "dayjs"
 // import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 // import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
@@ -40,19 +40,19 @@ const Home = ({ data, setData }) => {
 
 
     // configuring date picker
-    // function convertDateToString(date) {
-    //   let day = date.getDate()
-    //   let month = date.getMonth()
-    //   let year = date.getFullYear()
+    function convertDateToString(date) {
+      let day = date.getDate()
+      let month = date.getMonth()
+      let year = date.getFullYear()
   
-    //   if (day < 10) {
-    //     day = "0" + day
-    //   }
-    //   if (month < 10) {
-    //     month = "0" + month
-    //   }
-    //   return `${month}/${day}/${year}`
-    // }
+      if (day < 10) {
+        day = "0" + day
+      }
+      if (month < 10) {
+        month = "0" + month
+      }
+      return `${year}-${month}-${day}`
+    }
     
     //const currentDate = convertDateToString(new Date())
     //console.log(currentDate)
@@ -61,7 +61,9 @@ const Home = ({ data, setData }) => {
   const tasks = useMemo(() => {
     return (
       data.map(({ id, name, timeSpent, taskType, startDate}, index) => {
-        const formattedStartDate = startDate.toLocaleString()
+        const dateFn = new Date(startDate)
+        const formattedStartDate = convertDateToString(dateFn)
+        //console.log(formattedStartDate)
 
         return (
         <TaskCard 
@@ -73,6 +75,7 @@ const Home = ({ data, setData }) => {
           startDate={formattedStartDate}
           setData={setData}
           data={data}
+          style={style}
         />
         )
       })
@@ -89,7 +92,7 @@ const Home = ({ data, setData }) => {
       timeSpent: parseInt(timeSpent),
       startDate: startDate,
     };
-    console.log(formData)
+    //console.log(formData)
   
     const response = await fetch('https://time-tracker-8j3a.onrender.com/task/tasks', {
       method: "POST",
