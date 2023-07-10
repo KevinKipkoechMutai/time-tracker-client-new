@@ -40,7 +40,7 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<Home data={data} setData={setData}/>}/>
-                <Route path="/dashboard" element={<Dashboard data={data} setData={setData}/>}/>
+                <Route path="/dashboard" element={<Dashboard data={data}/>}/>
               </Routes>
             </Box>
           </ThemeProvider>
